@@ -1,3 +1,4 @@
+// src/components/DrugTable.jsx
 import React, { useEffect, useState } from "react";
 import { fetchConfig, fetchDrugs, fetchCompanies } from "../api";
 
@@ -12,7 +13,7 @@ export default function DrugTable() {
     fetchCompanies().then(setCompanies);
     loadDrugs();
   }, []);
-  console.log('drugs>>', drugs)
+
   const loadDrugs = (company) => {
     fetchDrugs(company).then(setDrugs);
   };
@@ -23,7 +24,8 @@ export default function DrugTable() {
     loadDrugs(company || undefined);
   };
 
-  const handleCompanyClick = (company) => {
+  const handleCompanyClick = (e, company) => {
+    e.preventDefault(); // prevent navigation
     setCompanyFilter(company);
     loadDrugs(company);
   };
@@ -62,21 +64,23 @@ export default function DrugTable() {
         </thead>
         <tbody>
           {drugs.map((d, idx) => (
-            <tr key={d._id}>
+            <tr key={d._id || d.code}>
               <td>{idx + 1}</td>
               <td>{d.code}</td>
               <td>
                 {d.genericName}
-                {d.brandName ? ` ${d.brandName}` : ""}
+                {d.brandName ? ` (${d.brandName})` : ""}
               </td>
               <td>
-                <span
+                {/* Render company as an anchor so tests (and accessibility) can find it by role="link" */}
+                <a
+                  href="#"
                   className="company-link"
-                  onClick={() => handleCompanyClick(d.company)}
+                  onClick={(e) => handleCompanyClick(e, d.company)}
                   data-testid={`company-${idx}`}
                 >
                   {d.company}
-                </span>
+                </a>
               </td>
               <td>{formatDate(d.launchDate)}</td>
             </tr>

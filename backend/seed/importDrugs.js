@@ -14,12 +14,13 @@ async function main() {
     const arr = JSON.parse(raw);
     console.log('arr>>>>', arr)
     const docs = arr.map(item => ({
-        cosd: item.code,
-        genricName: item.genricName,
+        code: item.code,
+        genricName: item.genericName,
         brandName: item.brandName,
         company: item.company,
-        lanchDate: item.lanchDate? new Date(item.lanchDate) : null
+        launchDate: item.launchDate ? new Date(item.launchDate) : null
     }));
+    console.log('arr>>>>', docs)
     await Drug.deleteMany({});
     await Drug.insertMany(docs);
     console.log(`Inserted ${docs.length} drugs`);

@@ -4,7 +4,7 @@ const router = express.Router();
 const Drug = require('../models/Drug');
 
 // GET /api/drugs
-router.get('/dsd', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     console.log('HIT /api/drugs/companies in drugs');
     const filter = {};
